@@ -25,4 +25,9 @@ class HomeController extends Controller
     {
         return view('web.pages.home.home');
     }
+    public function test()
+    {
+        return view('web.pages.users.up');
+    }
+   
 }
