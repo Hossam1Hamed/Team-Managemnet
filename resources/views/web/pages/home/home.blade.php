@@ -2,7 +2,7 @@
 @section('content')
 
 
-welcome
+welcome in dashboard
 
 
 

@@ -17,7 +17,7 @@
 
                                 </div>
                                 <div class="card-body">
-                                <form method="POST" action="{{ route('register') }}">
+                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                     @csrf
 
                                         <!-- Name -->
@@ -39,6 +39,27 @@
                                             @enderror
                                             <input class="form-control mb-0" id="email" type="email" name="email"
                                                 value="{{ old('email') }}" required />
+
+                                        </div>
+
+                                        <!-- Job Title -->
+                                        <div >
+                                            <label> {{ __('job title') }}</label>
+                                            @error('job title')
+                                                <br><label style="color: red">{{ $message }}</label>
+                                            @enderror
+                                            <input class="form-control mb-0" id="job" type="text" name="job"
+                                                value="{{ old('job') }}" required />
+
+                                        </div>
+
+                                        <!-- Image -->
+                                        <div >
+                                            <label> {{ __('image') }}</label>
+                                            @error('image')
+                                                <br><label style="color: red">{{ $message }}</label>
+                                            @enderror
+                                            <input class="form-control mb-0" id="image" type="file" name="image" />
 
                                         </div>
 

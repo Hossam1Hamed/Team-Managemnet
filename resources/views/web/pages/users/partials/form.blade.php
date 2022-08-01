@@ -46,6 +46,19 @@
     <input id="password-confirm" type="password" class="form-control mb-0" name="password_confirmation" required autocomplete="current-password" />
 </div>
 
+<!-- detect role -->
+<div class="mt-4">
+    <label>{{ __('Select Role') }}</label>
+    @error('role')
+        <br><label style="color: red">{{ $message }}</label>
+    @enderror
+    <select class="form-control" name="role">
+    <option value="" >...</option>
+        @foreach ($roles as $role)
+            <option value="{{$role->id}}" {{$user->roles[0]->id == $role->id ? 'selected' : ''}}>{{$role->name}}</option>
+        @endforeach
+    </select>
+</div>
 
 <!-- Select user type -->
 <div class="mt-4">
@@ -56,7 +69,7 @@
     <!-- <div class="form-group">
 <div class="btn-group dropup mt-7"> -->
     <select class="form-control btn bg-gradient-warning" id="selectSpec" name="type" required>
-        <!-- <option value="" disabled></option> -->
+        <option value="">...</option>
 
         <option value="2" {{ isset($user) && $user->type==2 ? 'selected' : ''}}>empolyee</option>
         <option value="3" {{ isset($user) && $user->type==3 ? 'selected' : ''}}>user</option>

@@ -15,7 +15,7 @@
         <td>
           <div class="d-flex px-2 py-1">
             <div>
-              <img src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/team-2.jpg" class="avatar avatar-sm me-3">
+              <img src="{{asset('avatars/default.jpg')}}" class="avatar avatar-sm me-3">
             </div>
           </div>
         </td>
@@ -29,22 +29,28 @@
           <span class="text-secondary text-xs font-weight-bold">{{$user->phone ? $user->phone : 'no Phone'}}</span>
         </td>
         <td class="align-middle">
+        @if(auth()->user()->hasPermission('users_read'))
           <a href="{{route('users.show',$user->id)}}" class="badge badge-sm badge-secondary" data-toggle="tooltip" data-original-title="Show user">
             show
           </a>
+          @endif
+          @if(auth()->user()->hasPermission('users_update'))
           <a href="{{route('users.edit',$user->id)}}" class="badge badge-sm badge-warning" data-toggle="tooltip" data-original-title="Edit user">
             Edit
           </a>
-          <a href="{{route('users.destroy',$user->id)}}" class="badge badge-sm badge-danger show_confirm" data-toggle="tooltip" data-original-title="Delete user">
-            delete
+          @endif
+          @if(auth()->user()->hasPermission('users_delete'))
+          <form method="post" action="{{route('users.destroy',$user->id)}}" style="display: inline-block;" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+            @csrf
+            {{ method_field('DELETE') }}
+            <button class="badge badge-sm badge-danger show_confirm">delete</button>
+          </form>
+          @endif
+          
+          <a href="{{route('message.index')}}" class="badge badge-sm badge-primary" data-toggle="tooltip" data-original-title="send message">
+            send message
           </a>
-          <div style="display:inline-block;">
-            <form method="post" action="{{route('users.destroy',$user->id)}}" data-bs-toggle="tooltip" data-bs-original-title="Delete">
-              @csrf
-              {{ method_field('DELETE') }}
-              <button class="badge badge-sm badge-danger border-none show_confirm">delete</button>
-            </form>
-          </div>
+          
         </td>
       </tr>
       @endforeach

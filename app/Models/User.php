@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laratrust\Traits\LaratrustUserTrait;
+use profile;
 
 class User extends Authenticatable
 {
@@ -29,10 +30,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'job',
+        'image',
         'password',
         'phone',
         // 'type',
         'status',
+        
     ];
 
     /**
@@ -53,4 +57,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function profile(){
+        return $this->hasOne('Profile');
+    }
 }

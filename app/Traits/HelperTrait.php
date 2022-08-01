@@ -4,12 +4,16 @@ namespace App\Traits;
 
 trait HelperTrait
 {
-    public function uploadImages($imageRequest, $placeMove)
+    public function uploadImages($request)
     {
-        $img = time() . md5(uniqid()) . "." . $imageRequest->guessExtension();
-        $path = $imageRequest->storeAs($placeMove, $img, 'public');
+        // $img = time() . md5(uniqid()) . "." . $imageRequest->guessExtension();
+        // $path = $imageRequest->storeAs($placeMove, $img, 'public');
 
-        return  '/storage/'.$path;
+        // return  '/storage/'.$path;
+        $path = $request->file('image')->store('avatars');
+ 
+        return $path;
+
     }
 
 }

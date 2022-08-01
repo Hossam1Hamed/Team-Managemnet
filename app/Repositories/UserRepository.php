@@ -11,5 +11,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         parent::__construct($model);
     }
+
+    public function getUserWithRoles($id){
+        return User::with('roles')->find($id);
+    }
     
 }

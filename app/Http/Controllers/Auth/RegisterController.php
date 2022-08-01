@@ -8,9 +8,12 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\Traits\HelperTrait;
 
 class RegisterController extends Controller
 {
+    use HelperTrait;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -31,6 +34,15 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    protected function redirectTo()
+    {
+        // dd(auth()->user());
+        // if ($user->type == 1 || $user->type == 2) { // do your magic here
+        //     return redirect('/home');
+        // }
+
+        return redirect('/website');
+    }
     /**
      * Create a new controller instance.
      *
@@ -50,23 +62,20 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name'  => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'job' => $data['job'],
+            'image' => $data['image'],
             'password' => Hash::make($data['password']),
         ]);
     }

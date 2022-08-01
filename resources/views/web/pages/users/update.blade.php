@@ -2,6 +2,7 @@
 @section('content')
 
 <form action="{{route('users.update',$user->id)}}" method="POST">
+    
     @csrf
     {{ method_field('PUT') }}
 

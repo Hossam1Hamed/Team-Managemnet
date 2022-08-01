@@ -14,8 +14,16 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
+        if (!$request->expectsJson()) {
             return route('login');
         }
     }
+
+    // The method "redirectTo" should return an url path, not the Redirect response.
+    // protected function redirectTo()
+    // {
+    //     if (\Auth::user()->hasRole('copy')) {
+    //         return '/copy/dashboardCopy';
+    //     }
+    // }
 }
