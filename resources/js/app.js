@@ -1,52 +1,40 @@
-alert('hello world');
+
 require('./bootstrap');
 
-const { default: axios } = require('axios');
+Vue.component('chat-messages', require('./components/ChatMessages.vue'));
+Vue.component('chat-form', require('./components/ChatForm.vue'));
 
-const messages_el = document.getElementById('messages');
-const username = document.getElementById('username');
-const message_input = document.getElementById('messageinput');
-const message_form = document.getElementById('messageform');
+const app = new Vue({
+    el: '#app',
 
-// window.Echo.channel('chat')
-//     .listen('Message',(e)=>{
-//         console.log(e.message);
-//         messages.innerHTML += e.message ;
-//     })
+    data: {
+        messages: []
+    },
 
-message_form.addEventListener('submit',function(e){
-    e.preventDefault();
-    
-    let has_errors = false;
-    if(username.value == ""){
-        alert('please enter a username...');
-        has_errors = true;
-    }
-    if(message_input.value == ''){
-        alert('please enter a message...');
-        has_errors = true;
-    }
-    if(has_errors){
-        return;
-    }
+    created() {
+        this.fetchMessages();
+        Echo.private('team')
+            .listen('MessageSent', (e) => {
+                this.messages.push({
+                    message: e.message.message,
+                    user: e.user
+                });
+            });
+    },
 
-    const options = {
-        method: 'post',
-        url: '/message-send',
-        data : {
-            username : username.value,
-            message : message_input.value,
+    methods: {
+        fetchMessages() {
+            axios.get('/messages').then(response => {
+                this.messages = response.data;
+            });
+        },
+
+        addMessage(message) {
+            this.messages.push(message);
+
+            axios.post('/messages', message).then(response => {
+                console.log(response.data);
+            });
         }
     }
-
-    axios(options);
 });
-
-window.Echo.channel('chat')
-    .listen('.Message',(e)=>{
-        messages_el.innerHTML += '<div class="message"><strong>'+e.username+'</strong>'+e.message+'</div>';
-    })
-
-// $('messageinput').keypress(function(e){
-//     console.log(e.which);
-// });

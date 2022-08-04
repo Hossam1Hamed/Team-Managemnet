@@ -34,8 +34,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [HomepageController::class , 'index'])->name('website.home');
-    Route::get('/website', [HomepageController::class , 'index'])->name('website.home');
-    Route::resource('/profile',ProfileController::class);
-    Route::resource('message',MessageController::class);
+    Route::get('/', [HomepageController::class, 'index'])->name('website.home');
+    Route::get('/website', [HomepageController::class, 'index'])->name('website.home');
+    Route::resource('/profile', ProfileController::class);
+    Route::resource('message', MessageController::class);
+    Route::get('message/fetch', [MessageController::class,'fetchMessage']);
+    Route::post('messages/send', [MessageController::class,'sendMessage']);
 });

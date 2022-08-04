@@ -4,21 +4,38 @@ namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Events\Message;
+use App\Events\MessageEvent;
+use App\Models\Message;
+use App\Events\MessageSent;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
-    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         return view('website.pages.messages.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function sendMessage(Request $request)
+    {
+        $user = Auth::user();
+
+        $message = $user->messages()->create([
+            'message' => $request->input('message')
+        ]);
+        broadcast(new MessageSent($user, $message))->toOthers();
+
+        return ['status' => 'Message Sent!'];
+    }
+    public function fetchMessage()
+    {
+        return Message::with('user')->get();
+    }
+
     public function create()
     {
         //
@@ -32,8 +49,8 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        event(new Message($request->username,$request->message));
-        return ['success'=>true];
+        event(new MessageEvent($request->username, $request->message));
+        return ['success' => true];
     }
 
     /**
